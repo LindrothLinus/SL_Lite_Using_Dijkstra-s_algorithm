@@ -16,7 +16,7 @@ public class Edge {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return to.toString();
+        return to.toString() + " [" +arrivelTime + " - " + depatrureTime+"]";
     }
 
     // TODO hashcode?
@@ -24,7 +24,7 @@ public class Edge {
     public boolean equals(Object obj) {
         // TODO Auto-generated method stub
         if (obj instanceof Edge e) {
-            return to.equals(e.to);
+            return to.equals(e.to) && arrivelTime.equals(e.arrivelTime)&& depatrureTime.equals(e.depatrureTime);
         }
         return false;
     }
@@ -35,6 +35,9 @@ public class Edge {
     }
 
     public int getWaitingCost(Edge other){
+        if(other == null){
+            return 0;
+        }
         return calculateTimeDiffrence(arrivelTime, other.depatrureTime);
     }
 
@@ -49,7 +52,7 @@ public class Edge {
 
         int diffrence = t2Sec - t1Sec;
         if (diffrence < 0) {
-            throw new IllegalArgumentException("Transportmedlet dykerupp innan det åkt (" + (diffrence) + ")");
+            throw new IllegalArgumentException("Transportmedlet dykerupp innan det åkt (" + t1+" - " +t2+" = "+ (diffrence) + ")");
         }
 
         return diffrence;
@@ -62,6 +65,6 @@ public class Edge {
     @Override
     public int hashCode() {
         // TODO Auto-generated method stub
-        return Objects.hash(to);
+        return Objects.hash(to,depatrureTime,arrivelTime);
     }
 }

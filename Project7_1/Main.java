@@ -19,7 +19,7 @@ public class Main {
         g.connectStops();
 
         System.out.println(g.findShotestPathWithId("740012883", "740021659"));
-
+        //g.printRoads();
     }
 
     private static void startUserIteraction(){

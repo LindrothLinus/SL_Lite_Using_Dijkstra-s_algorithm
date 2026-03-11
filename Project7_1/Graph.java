@@ -120,6 +120,19 @@ public class Graph {
         return roads;
     }
 
+    public void printRoads(){
+        StringBuilder sb = new StringBuilder();
+        for(Stop s:roads.keySet()){
+            sb.append(s + ": [");
+            for(Edge e : roads.get(s)){
+                sb.append(e +", ");
+            }
+            sb.append("] \n\n");
+        }
+
+        System.out.println(sb);
+    }
+
     public Map<String, Route> getRoutes() {
         return routes;
     }
@@ -168,6 +181,19 @@ public class Graph {
                 }
                 break;
             }
+            
+            Edge[] edges = roads.get(current.getStop()).toArray(Edge[]::new);
+            for(int i = 0 ; i<edges.length; i++){
+                Stop stop = edges[i].getTo();
+                if(!visited.containsKey(stop) || visited.get(stop).compareTo(current.getGn()+edges[i].getTravelCost())>0){
+                    binaryHeap.add(new Node(stop, edges[i].getTravelCost()+current.getGn(), stop.calculateDistanceInTime(to),current));
+                    visited.put(stop,current.getGn() + edges[i].getTravelCost());
+
+                }
+                 
+            }
+
+/* 
             for(Edge edge: roads.get(current.getStop())){
                 Stop stop = edge.getTo();
                 if(!visited.containsKey(stop) || visited.get(stop).compareTo(current.getGn()+edge.getTravelCost())>0){
@@ -176,7 +202,7 @@ public class Graph {
 
                 }
                 
-            }
+            }*/
 
         }
         return answer.reversed();        

@@ -5,14 +5,18 @@ public class Node implements Comparable<Node>{
     private double gn; 
     private double hn;
     private Node parent;
+    private Edge usedEdge;
 
     public Node(Stop stop, double gn, double hn,Node parent){
         this.stop=stop;
         this.gn = gn;
         this.hn = hn;
         this.parent=parent;
+        this.usedEdge = usedEdge;
     }
-
+public Edge getUsedEdge() {
+    return usedEdge;
+}
 
     @Override
     public int compareTo(Node o) {

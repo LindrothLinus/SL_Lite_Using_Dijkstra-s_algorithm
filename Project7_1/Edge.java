@@ -6,17 +6,25 @@ public class Edge {
     Stop to;
     String depatrureTime;
     String arrivelTime;
+    int cost;
 
-    public Edge(Stop to, StopTime stopTime) {
+    public Edge(Stop to, StopTime stopTime, StopTime otherStopTime) {
         this.to = to;
-        this.arrivelTime = stopTime.getArivelTime();
         this.depatrureTime = stopTime.getDepatureTime();
+        this.arrivelTime = otherStopTime.getArivelTime();
+        cost = stopTime.travelTime(otherStopTime);
+
     }
+
+    /*public Edge(Stop to, int cost){
+        this.to = to;
+        this.cost = cost;
+    }*/
 
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return to.toString() + " [" +arrivelTime + " - " + depatrureTime+"]";
+        return to.toString() + " [" + depatrureTime + " - " + arrivelTime+"]";
     }
 
     // TODO hashcode?
@@ -24,21 +32,25 @@ public class Edge {
     public boolean equals(Object obj) {
         // TODO Auto-generated method stub
         if (obj instanceof Edge e) {
-            return to.equals(e.to) && arrivelTime.equals(e.arrivelTime)&& depatrureTime.equals(e.depatrureTime);
+            return to.equals(e.to)&& arrivelTime.equals(e.arrivelTime)&& depatrureTime.equals(e.depatrureTime);
         }
         return false;
     }
 
     public int getTravelCost() {
-        return calculateTimeDiffrence(depatrureTime, arrivelTime);
+        return cost;//calculateTimeDiffrence(depatrureTime, arrivelTime);
 
     }
 
-    public int getWaitingCost(Edge other){
+    public int getWaitingCostFrom(String time){
+        return calculateTimeDiffrence(time, depatrureTime);
+    }
+
+    public int getWaitingCostFrom(Edge other){
         if(other == null){
-            return 0;
+            throw new IllegalArgumentException("getWaitingCost: other är null.");
         }
-        return calculateTimeDiffrence(arrivelTime, other.depatrureTime);
+        return calculateTimeDiffrence(other.arrivelTime, depatrureTime);
     }
 
     private int calculateTimeDiffrence(String t1, String t2){
@@ -52,7 +64,7 @@ public class Edge {
 
         int diffrence = t2Sec - t1Sec;
         if (diffrence < 0) {
-            throw new IllegalArgumentException("Transportmedlet dykerupp innan det åkt (" + t1+" - " +t2+" = "+ (diffrence) + ")");
+            diffrence += 86400;
         }
 
         return diffrence;
@@ -66,5 +78,9 @@ public class Edge {
     public int hashCode() {
         // TODO Auto-generated method stub
         return Objects.hash(to,depatrureTime,arrivelTime);
+    }
+
+    public String getArrivelTime() {
+        return arrivelTime;
     }
 }

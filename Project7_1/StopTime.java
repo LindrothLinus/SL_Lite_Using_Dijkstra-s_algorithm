@@ -24,7 +24,7 @@ public class StopTime {
     }
     
 
-    /*public int travelTime(StopTime other){
+    public int travelTime(StopTime other){
         String[] thisTimes = depatureTime.split(":");
         String[] otherTimes = other.arivelTime.split(":");
 
@@ -38,7 +38,7 @@ public class StopTime {
 
         return diffrence;
 
-    }*/
+    }
 
     @Override
     public String toString() {

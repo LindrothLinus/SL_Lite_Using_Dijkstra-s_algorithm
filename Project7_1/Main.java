@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Graph g = new Graph();
         initGraph(g);
-        //startUserIteraction(); 
+        //System.out.println(g.getRoads());
     }
 
     private static void initGraph(Graph g){
@@ -18,7 +18,7 @@ public class Main {
         g.loadTimes("Project7_1/sl_stop_times.txt");
         g.connectStops();
 
-        System.out.println(g.findShotestPathWithId("740012883", "740021659"));
+        System.out.println(g.findShotestPathWithId("740021666", "740021673"));
         //g.printRoads();
     }
 

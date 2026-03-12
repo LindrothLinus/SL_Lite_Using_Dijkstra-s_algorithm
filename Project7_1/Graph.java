@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -16,7 +17,7 @@ public class Graph {
     private Map<String, Trip> trips = new HashMap<>();
     private Map<String, Route> routes = new HashMap<>();
     private Map<Stop, Set<Edge>> roads = new HashMap<>();
-    private Map<Stop,StopTime> stopTimes = new HashMap<>();
+    private Map<Stop, StopTime> stopTimes = new HashMap<>();
 
     // TODO: Load methoderna borde på någotsätt sättas ihop (Flera ctrl + V)
     public void loadStops(String filePath) {
@@ -99,7 +100,6 @@ public class Graph {
         return trips;
     }
 
-
     public void connectStops() {
         for (String key : trips.keySet()) {
             Trip current = trips.get(key);
@@ -110,8 +110,8 @@ public class Graph {
 
                 roads.putIfAbsent(to, new HashSet<>());
                 roads.putIfAbsent(from, new HashSet<>());
-                roads.get(to).add(new Edge(from, stopTimes.get(i)));
-                roads.get(from).add(new Edge(to, stopTimes.get(i)));
+                roads.get(to).add(new Edge(from, stopTimes.get(i), stopTimes.get(i + 1)));
+                roads.get(from).add(new Edge(from, stopTimes.get(i), stopTimes.get(i + 1)));
             }
         }
     }
@@ -120,12 +120,12 @@ public class Graph {
         return roads;
     }
 
-    public void printRoads(){
+    public void printRoads() {
         StringBuilder sb = new StringBuilder();
-        for(Stop s:roads.keySet()){
+        for (Stop s : roads.keySet()) {
             sb.append(s + ": [");
-            for(Edge e : roads.get(s)){
-                sb.append(e +", ");
+            for (Edge e : roads.get(s)) {
+                sb.append(e + ", ");
             }
             sb.append("] \n\n");
         }
@@ -137,8 +137,8 @@ public class Graph {
         return routes;
     }
 
-    public List<Stop> findShotestPathWithId(String from, String to) {
-        return aStarSerch(stops.get(from), stops.get(to));
+    public Map<Stop, String> findShotestPathWithId(String from, String to) {
+        return aStarSerch(stops.get(from), stops.get(to),"10:00:00");
     }
 
     public List<Stop> findShortestPath(Stop from, Stop to) {
@@ -165,47 +165,48 @@ public class Graph {
         return false;
     }
 
-    private List<Stop> aStarSerch(Stop from, Stop to){
+    private Map<Stop, String> aStarSerch(Stop from, Stop to,String startTime) {
         PriorityQueue<Node> binaryHeap = new PriorityQueue<>();
-        List<Stop> answer = new ArrayList<>();
-        binaryHeap.add(new Node(from, 0, 0,null));
-        
-        Map<Stop,Double> visited = new HashMap<>();
-        while(!binaryHeap.isEmpty()){
-            Node current =binaryHeap.poll();
-            if(current.getStop().equals(to)){
-                answer.add(current.getStop());
-                while(current.getParent()!=null){
-                    current = current.getParent();
-                    answer.add(current.getStop());
-                }
-                break;
-            }
-            
-            Edge[] edges = roads.get(current.getStop()).toArray(Edge[]::new);
-            for(int i = 0 ; i<edges.length; i++){
-                Stop stop = edges[i].getTo();
-                if(!visited.containsKey(stop) || visited.get(stop).compareTo(current.getGn()+edges[i].getTravelCost())>0){
-                    binaryHeap.add(new Node(stop, edges[i].getTravelCost()+current.getGn(), stop.calculateDistanceInTime(to),current));
-                    visited.put(stop,current.getGn() + edges[i].getTravelCost());
+        binaryHeap.add(new Node(from, 0, 0, null, null));
 
-                }
-                 
+        Map<Stop, Double> visited = new HashMap<>();
+        while (!binaryHeap.isEmpty()) {
+            Node current = binaryHeap.poll();
+            if (current.getStop().equals(to)) {
+                return fromatAnswer(current);
             }
 
-/* 
-            for(Edge edge: roads.get(current.getStop())){
+            for (Edge edge : roads.get(current.getStop())) {
                 Stop stop = edge.getTo();
-                if(!visited.containsKey(stop) || visited.get(stop).compareTo(current.getGn()+edge.getTravelCost())>0){
-                    binaryHeap.add(new Node(stop, edge.getTravelCost()+current.getGn(), stop.calculateDistanceInTime(to),current));
-                    visited.put(stop,current.getGn() + edge.getTravelCost());
-
+                double newCost;
+                if (current.getUsedEdge() != null) {
+                    newCost = current.getGn()+ edge.getTravelCost()+ edge.getWaitingCostFrom(current.getUsedEdge());
+                } else {
+                    newCost = current.getGn()+edge.getWaitingCostFrom(startTime)
+                            + edge.getTravelCost();
                 }
-                
-            }*/
+                if (!visited.containsKey(stop)|| visited.get(stop)>newCost) {
+                    binaryHeap.add(new Node(stop,newCost,stop.calculateDistanceInTime(to), current, edge));
+                    visited.put(stop, newCost);
+                }
+
+            }
 
         }
-        return answer.reversed();        
+        return null;
+    }
+
+    private Map<Stop,String> fromatAnswer(Node lastNode){
+        Map<Stop,String> answer = new LinkedHashMap<>();
+        answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
+            while (lastNode.getParent() != null) {
+                lastNode = lastNode.getParent();
+                answer.put(lastNode.getStop(), "");
+                if (lastNode.getUsedEdge() != null) {
+                    answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
+                }
+            }
+        return answer;
     }
 
 }

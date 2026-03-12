@@ -15,10 +15,10 @@ public class Stop {
     }
 
     public double calculateDistanceInTime(Stop other) {
-        return getDistanceFromLatLonInKm(other)/MAX_VEHICAL_SPEED;
+        return getDistanceFromLatLonInMeter(other)/(MAX_VEHICAL_SPEED/3.6);
     }
 
-    private double getDistanceFromLatLonInKm(Stop other) {
+    private double getDistanceFromLatLonInMeter(Stop other) {
         var R = 6371; // Radius of the earth in km
         var dLat = deg2rad(other.lat - lat); // deg2rad below
         var dLon = deg2rad(other.lon - lon);
@@ -27,7 +27,7 @@ public class Stop {
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c; // Distance in km
-        return d;
+        return d*1000;
     }
 
     private double deg2rad(double deg) {

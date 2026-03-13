@@ -18,7 +18,7 @@ public class Main {
         g.loadTimes("Project7_1/sl_stop_times.txt");
         g.connectStops();
 
-        System.out.println(g.findShotestPathWithId("740021666", "740021673","10:08:00"));
+        System.out.println(g.findShotestPathWithId("740021649", "740000716","08:26:00"));
         //g.printRoads();
     }
 

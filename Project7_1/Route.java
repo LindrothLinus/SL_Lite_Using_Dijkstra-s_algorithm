@@ -11,6 +11,8 @@ public class Route {
         this.type = type;
     }
 
+
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Route r){

@@ -7,12 +7,14 @@ public class Edge {
     String depatrureTime;
     String arrivelTime;
     int cost;
+    StopTime stopTime;
 
     public Edge(Stop to, StopTime stopTime, StopTime otherStopTime) {
         this.to = to;
         this.depatrureTime = stopTime.getDepatureTime();
         this.arrivelTime = otherStopTime.getArivelTime();
         cost = stopTime.travelTime(otherStopTime);
+        this.stopTime = stopTime;
 
     }
 
@@ -20,6 +22,9 @@ public class Edge {
         this.to = to;
         this.cost = cost;
     }*/
+    public StopTime getStopTime() {
+       return stopTime;
+    }
 
     @Override
     public String toString() {

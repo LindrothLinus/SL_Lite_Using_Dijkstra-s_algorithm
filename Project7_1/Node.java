@@ -45,4 +45,10 @@ public Edge getUsedEdge() {
     public Node getParent() {
         return parent;
     }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return stop.toString();
+    }
 }

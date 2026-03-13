@@ -4,13 +4,18 @@ public class StopTime {
     private String arivelTime;
     private String depatureTime;
     private Stop stop;
+    private Trip trip;
 
-    public StopTime(String arivelTime, String departureTime, Stop stop){
+    public StopTime(String arivelTime, String departureTime, Stop stop, Trip trip){
         this.arivelTime = arivelTime;
         this.depatureTime = departureTime;
         this.stop = stop;
+        this.trip = trip;
     }
 
+    public Trip getTrip() {
+        return trip;
+    }
     public Stop getStop(){
         return stop;
     }

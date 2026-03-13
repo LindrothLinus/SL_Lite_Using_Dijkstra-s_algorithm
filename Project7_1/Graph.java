@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -17,7 +16,6 @@ public class Graph {
     private Map<String, Trip> trips = new HashMap<>();
     private Map<String, Route> routes = new HashMap<>();
     private Map<Stop, Set<Edge>> roads = new HashMap<>();
-    private Map<Stop, StopTime> stopTimes = new HashMap<>();
 
     // TODO: Load methoderna borde på någotsätt sättas ihop (Flera ctrl + V)
     public void loadStops(String filePath) {
@@ -71,10 +69,6 @@ public class Graph {
         }
     }
 
-    public void loadEdges() {
-        System.out.println("Inte implementerad");
-    }
-
     public void loadTimes(String filePath) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -84,7 +78,7 @@ public class Graph {
             while ((line = br.readLine()) != null) {
                 String[] lineParts = line.split(",");
                 trips.get(lineParts[0]).addStopTime(Integer.parseInt(lineParts[4]) - 1,
-                        new StopTime(lineParts[1], lineParts[2], stops.get(lineParts[3])));
+                        new StopTime(lineParts[1], lineParts[2], stops.get(lineParts[3]),trips.get(lineParts[0])));
             }
             br.close();
         } catch (IOException e) {
@@ -187,6 +181,10 @@ public class Graph {
                 }
             }
         return answer;
+    }
+
+    private String getRouteNameFromNode(Node node){
+        return node.getUsedEdge().getStopTime().getTrip().getRoute().getName();
     }
 
 }

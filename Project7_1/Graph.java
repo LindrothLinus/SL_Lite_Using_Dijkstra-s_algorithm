@@ -137,32 +137,8 @@ public class Graph {
         return routes;
     }
 
-    public Map<Stop, String> findShotestPathWithId(String from, String to) {
-        return aStarSerch(stops.get(from), stops.get(to),"10:00:00");
-    }
-
-    public List<Stop> findShortestPath(Stop from, Stop to) {
-        ArrayList<Stop> stops = new ArrayList<>();
-        rekuriveShotestPath(from, to, stops, new HashSet<>());
-        return stops.reversed();
-    }
-
-    private boolean rekuriveShotestPath(Stop from, Stop to, ArrayList<Stop> stops, Set<Stop> visited) {
-        Set<Edge> edges = roads.get(from);
-        visited.add(from);
-        for (Edge edge : edges) {
-            if (!visited.contains(edge.getTo())) {
-                if (edge.getTo().equals(to)) {
-                    stops.add(to);
-                    stops.add(from);
-                    return true;
-                } else if (rekuriveShotestPath(edge.getTo(), to, stops, visited)) {
-                    stops.add(from);
-                    return true;
-                }
-            }
-        }
-        return false;
+    public Map<Stop, String> findShotestPathWithId(String from, String to,String time) {
+        return aStarSerch(stops.get(from), stops.get(to),time);
     }
 
     private Map<Stop, String> aStarSerch(Stop from, Stop to,String startTime) {
@@ -198,12 +174,16 @@ public class Graph {
 
     private Map<Stop,String> fromatAnswer(Node lastNode){
         Map<Stop,String> answer = new LinkedHashMap<>();
+        Node beforLast=null;
         answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
             while (lastNode.getParent() != null) {
+                beforLast = lastNode;
                 lastNode = lastNode.getParent();
-                answer.put(lastNode.getStop(), "");
                 if (lastNode.getUsedEdge() != null) {
                     answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
+                }
+                else{
+                    answer.put(lastNode.getStop(), beforLast.getUsedEdge().getDepatrureTime());
                 }
             }
         return answer;

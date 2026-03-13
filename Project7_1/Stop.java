@@ -44,6 +44,10 @@ public class Stop {
         }
     }
 
+    public String getId(){
+        return id;
+    }
+    
     @Override
     public int hashCode() {
         try {

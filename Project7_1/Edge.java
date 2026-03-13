@@ -83,4 +83,8 @@ public class Edge {
     public String getArrivelTime() {
         return arrivelTime;
     }
+
+    public String getDepatrureTime() {
+        return depatrureTime;
+    }
 }

@@ -6,7 +6,6 @@ public class Node implements Comparable<Node>{
     private double hn;
     private Node parent;
     private Edge usedEdge;
-    private int time;
 
     public Node(Stop stop, double gn, double hn,Node parent,Edge usedEdge){
         this.stop=stop;
@@ -14,7 +13,6 @@ public class Node implements Comparable<Node>{
         this.hn = hn;
         this.parent=parent;
         this.usedEdge = usedEdge;
-        this.time = time;
     }
 public Edge getUsedEdge() {
     return usedEdge;
@@ -43,6 +41,7 @@ public Edge getUsedEdge() {
     public double getHn() {
         return hn;
     }
+    
     public Node getParent() {
         return parent;
     }

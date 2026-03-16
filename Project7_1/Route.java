@@ -11,7 +11,9 @@ public class Route {
         this.type = type;
     }
 
-
+    public String getName() {
+        return name;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -28,11 +30,6 @@ public class Route {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return "[Linje:" + name +" Typ:"+type+"]"; 
-    }
-
-    public String getName() {
-        return name;
     }
 }

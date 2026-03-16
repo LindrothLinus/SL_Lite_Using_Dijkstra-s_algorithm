@@ -1,11 +1,11 @@
 package Project7_1;
 
 public class Stop {
-    final static int MAX_VEHICAL_SPEED = 90;
+    private final static int MAX_VEHICAL_SPEED = 90;
 
-    String id;
-    String name;
-    double lat, lon;
+    private String id;
+    private String name;
+    private double lat, lon;
 
     public Stop(String id, String name, double lat, double lon) {
         this.id = id;
@@ -13,9 +13,38 @@ public class Stop {
         this.lat = lat;
         this.lon = lon;
     }
+
     public String getName() {
         return name;
     }
+
+    public String getId(){
+        return id;
+    }
+
+        @Override
+    public boolean equals(Object other) {
+        if (other instanceof Stop s) {
+            return s.id.equals(id);
+        } else {
+            return false;
+        }
+    }
+    
+    @Override
+    public int hashCode() {
+        try {
+            int code = 0;
+            for (char c : id.toCharArray()) {
+                code += c * 7;
+            }
+            return code;
+        } catch (NumberFormatException e) {
+            System.out.println(id);
+            return 0;
+        }
+    }
+
     public double calculateDistanceInTime(Stop other) {
         return getDistanceFromLatLonInMeter(other)/(MAX_VEHICAL_SPEED/3.6);
     }
@@ -34,34 +63,6 @@ public class Stop {
 
     private double deg2rad(double deg) {
         return deg * (Math.PI/180);
-    }
-
-    // TODO: Fixa bättre hashCode och equals
-    @Override
-    public boolean equals(Object other) {
-        if (other instanceof Stop s) {
-            return s.id.equals(id);
-        } else {
-            return false;
-        }
-    }
-
-    public String getId(){
-        return id;
-    }
-    
-    @Override
-    public int hashCode() {
-        try {
-            int code = 0;
-            for (char c : id.toCharArray()) {
-                code += c * 7;
-            }
-            return code;
-        } catch (NumberFormatException e) {
-            System.out.println(id);
-            return 0;
-        }
     }
 
     @Override

@@ -44,7 +44,7 @@ public class Graph {
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] lineParts = line.split(",");
-                trips.put(lineParts[2], new Trip(lineParts[1], lineParts[3], routes.get(lineParts[0])));
+                trips.put(lineParts[2], new Trip(lineParts[1], routes.get(lineParts[0])));
             }
             br.close();
         } catch (IOException e) {

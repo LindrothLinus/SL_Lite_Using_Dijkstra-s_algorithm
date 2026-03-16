@@ -5,14 +5,20 @@ import java.util.Objects;
 
 public class Trip {
     private String serviceId;
-    private String headsign;
     private Route route;
     private ArrayList<StopTime> stopTimes = new ArrayList<>();
     
-    public Trip(String serviceId, String headsign, Route route){
+    public Trip(String serviceId, Route route){
         this.serviceId = serviceId;
-        this.headsign = headsign;
         this.route = route;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public ArrayList<StopTime> getStopTimes(){
+        return stopTimes;
     }
 
     @Override
@@ -32,7 +38,6 @@ public class Trip {
         stopTimes.add(index, stopTime);
     }
 
-    //TODO: Dålig ta bort/ ändra
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -41,14 +46,5 @@ public class Trip {
             sb.append(stopTime.getStop()+", ");
         }
         return sb.append("]\n\n").toString();
-    }
-
-    //TODO: borde kanske inte returnera katiska listan?
-    public ArrayList<StopTime> getStopTimes(){
-        return stopTimes;
-    }
-
-    public Route getRoute() {
-        return route;
     }
 }

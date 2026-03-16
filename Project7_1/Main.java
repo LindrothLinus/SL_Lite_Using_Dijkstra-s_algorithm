@@ -10,6 +10,8 @@ public class Main {
     public static void main(String[] args) {
         Graph g = new Graph();
         initGraph(g);
+        System.out.print(g.findShotestPathWithId("740021647", "740012883", "08:30:00"));
+
         //System.out.println(g.getRoads());
     }
 
@@ -19,12 +21,6 @@ public class Main {
         g.loadTrips("Project7_1/sl_trips.txt");
         g.loadTimes("Project7_1/sl_stop_times.txt");
         g.connectStops();
-        System.out.print(g.findShotestPathWithId("740021647", "740012883", "08:30:00"));
-        //startUserIteraction(g);
-
-        
-        //g.printRoads();
-
     }
 
     private static void startUserIteraction(Graph g){

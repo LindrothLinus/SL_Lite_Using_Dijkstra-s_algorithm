@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class Graph {
     private Map<String, Stop> stops = new HashMap<>();
@@ -17,81 +18,49 @@ public class Graph {
     private Map<String, Route> routes = new HashMap<>();
     private Map<Stop, Set<Edge>> roads = new HashMap<>();
 
-    // TODO: Load methoderna borde på någotsätt sättas ihop (Flera ctrl + V)
-    public void loadStops(String filePath) {
+    private void readFile(String filePath,Consumer<String[]>lineParser){
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
             String line;
-            // TODO: Fult ändra?
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] lineParts = line.split(",");
-                stops.put(lineParts[0], new Stop(lineParts[0], lineParts[1], Double.parseDouble(lineParts[2]),
-                        Double.parseDouble(lineParts[3])));
-
+                lineParser.accept(lineParts);
             }
             br.close();
         } catch (IOException e) {
             System.out.println("Error reading file.");
         }
+
     }
 
+    public void loadStops(String filePath){
+        readFile(filePath, (String[] lineParts)->{
+            stops.put(lineParts[0], new Stop(
+                                    lineParts[0], 
+                                    lineParts[1], 
+                                    Double.parseDouble(lineParts[2]),
+                                    Double.parseDouble(lineParts[3])));});
+        
+    }
     public void loadTrips(String filePath) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line;
-            // TODO: Fult ändra?
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                String[] lineParts = line.split(",");
-                trips.put(lineParts[2], new Trip(lineParts[1], routes.get(lineParts[0])));
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
+        readFile(filePath, (String[] lineParts)->{
+            trips.put(lineParts[2], new Trip(lineParts[1], routes.get(lineParts[0])));
+        });
     }
 
     public void loadRoutes(String filePath) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line;
-            // TODO: Fult ändra?
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                String[] lineParts = line.split(",");
-                routes.put(lineParts[0],
-                        new Route(lineParts[2].equals("") ? lineParts[3] : lineParts[2], lineParts[4]));
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
+        readFile(filePath, (String[] lineParts)->{
+            routes.put(lineParts[0],
+            new Route(lineParts[2].equals("") ? lineParts[3] : lineParts[2], lineParts[4]));
+        });
     }
 
     public void loadTimes(String filePath) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line;
-            // TODO: Fult ändra?
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                String[] lineParts = line.split(",");
-                trips.get(lineParts[0]).addStopTime(Integer.parseInt(lineParts[4]) - 1,
-                        new StopTime(lineParts[1], lineParts[2], stops.get(lineParts[3]),trips.get(lineParts[0])));
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-    }
-
-    public Map<String, Stop> getStopsMap() {
-        return stops;
-    }
-
-    public Map<String, Trip> getTripsMap() {
-        return trips;
+        readFile(filePath, (String[] lineParts)->{
+            trips.get(lineParts[0]).addStopTime(Integer.parseInt(lineParts[4]) - 1,
+            new StopTime(lineParts[1], lineParts[2], stops.get(lineParts[3]),trips.get(lineParts[0])));
+        });
     }
 
     public void connectStops() {
@@ -110,26 +79,6 @@ public class Graph {
         }
     }
 
-    public Map<Stop, Set<Edge>> getRoads() {
-        return roads;
-    }
-
-    public void printRoads() {
-        StringBuilder sb = new StringBuilder();
-        for (Stop s : roads.keySet()) {
-            sb.append(s + ": [");
-            for (Edge e : roads.get(s)) {
-                sb.append(e + ", ");
-            }
-            sb.append("] \n\n");
-        }
-
-        System.out.println(sb);
-    }
-
-    public Map<String, Route> getRoutes() {
-        return routes;
-    }
 
     public LinkedHashMap<Stop, String> findShotestPathWithId(String from, String to,String time) {
         /*Stop sFrom=null;

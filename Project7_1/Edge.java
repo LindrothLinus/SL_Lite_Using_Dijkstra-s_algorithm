@@ -13,38 +13,43 @@ public class Edge {
         this.to = to;
         this.depatrureTime = stopTime.getDepatureTime();
         this.arrivelTime = otherStopTime.getArivelTime();
-        cost = stopTime.travelTime(otherStopTime);
+        this.cost = stopTime.travelTime(otherStopTime);
         this.stopTime = stopTime;
 
     }
 
-    /*public Edge(Stop to, int cost){
-        this.to = to;
-        this.cost = cost;
-    }*/
+    public Stop getTo() {
+        return to;
+    }
+
+    public String getDepatrureTime() {
+        return depatrureTime;
+    }
+
+    public String getArrivelTime() {
+        return arrivelTime;
+    }
+
+    public int getTravelCost() {
+        return cost;
+    }
+
     public StopTime getStopTime() {
        return stopTime;
     }
 
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return to.toString() + " [" + depatrureTime + " - " + arrivelTime+"]";
-    }
 
-    // TODO hashcode?
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
         if (obj instanceof Edge e) {
             return to.equals(e.to)&& arrivelTime.equals(e.arrivelTime)&& depatrureTime.equals(e.depatrureTime);
         }
         return false;
     }
 
-    public int getTravelCost() {
-        return cost;//calculateTimeDiffrence(depatrureTime, arrivelTime);
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(to,depatrureTime,arrivelTime);
     }
 
     public int getWaitingCostFrom(String time){
@@ -75,21 +80,8 @@ public class Edge {
         return diffrence;
     }
 
-    public Stop getTo() {
-        return to;
-    }
-
     @Override
-    public int hashCode() {
-        // TODO Auto-generated method stub
-        return Objects.hash(to,depatrureTime,arrivelTime);
-    }
-
-    public String getArrivelTime() {
-        return arrivelTime;
-    }
-
-    public String getDepatrureTime() {
-        return depatrureTime;
+    public String toString() {
+        return to.toString() + " [" + depatrureTime + " - " + arrivelTime+"]";
     }
 }

@@ -3,11 +3,11 @@ package Project7_1;
 import java.util.Objects;
 
 public class Edge {
-    Stop to;
-    String depatrureTime;
-    String arrivelTime;
-    int cost;
-    StopTime stopTime;
+    private Stop to;
+    private String depatrureTime;
+    private String arrivelTime;
+    private int cost;
+    private StopTime stopTime;
 
     public Edge(Stop to, StopTime stopTime, StopTime otherStopTime) {
         this.to = to;

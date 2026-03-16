@@ -3,6 +3,8 @@ package Project7_1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,19 +19,32 @@ public class Main {
         g.loadTrips("Project7_1/sl_trips.txt");
         g.loadTimes("Project7_1/sl_stop_times.txt");
         g.connectStops();
+        System.out.print(g.findShotestPathWithId("740021647", "740012883", "8:30:00"));
+        //startUserIteraction(g);
 
-        System.out.println(g.findShotestPathWithId("740021649", "740000716","08:26:00"));
+        
         //g.printRoads();
+
     }
 
-    private static void startUserIteraction(){
+    private static void startUserIteraction(Graph g){
         System.out.println("Från: \tTill: \tStarttid:  (. för nu)");
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         try {
             String input = r.readLine();
+            String[] inputs = input.split(",");
+            printMap( g.findShotestPathWithId(inputs[0], inputs[1],inputs[2]));
 
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Problem med readern Försök igen....");
         }
+    }
+
+    private static void printMap(LinkedHashMap<Stop,String> map){
+        StringBuilder sb = new StringBuilder();
+        for(Stop stop:map.keySet()){
+            sb.insert(0, stop+" "+map.get(stop) + "\n");
+        }
+        System.out.println(sb);
     }
 }

@@ -13,7 +13,9 @@ public class Stop {
         this.lat = lat;
         this.lon = lon;
     }
-
+    public String getName() {
+        return name;
+    }
     public double calculateDistanceInTime(Stop other) {
         return getDistanceFromLatLonInMeter(other)/(MAX_VEHICAL_SPEED/3.6);
     }

@@ -131,11 +131,26 @@ public class Graph {
         return routes;
     }
 
-    public Map<Stop, String> findShotestPathWithId(String from, String to,String time) {
+    public LinkedHashMap<Stop, String> findShotestPathWithId(String from, String to,String time) {
+        /*Stop sFrom=null;
+        Stop sTo = null;
+        for(String key:stops.keySet()){
+            Stop stop = stops.get(key);
+            if(stop.getName().equals(from)){
+                sFrom = stop;
+            }
+            if(stop.getName().equals(to)){
+                sTo = stop;
+            }
+
+        }
+        if(sFrom==null || sTo==null){
+            throw new IllegalArgumentException(from+" eller " +to + "existerar ej"+sFrom+sTo);
+        }*/
         return aStarSerch(stops.get(from), stops.get(to),time);
     }
 
-    private Map<Stop, String> aStarSerch(Stop from, Stop to,String startTime) {
+    private LinkedHashMap<Stop, String> aStarSerch(Stop from, Stop to,String startTime) {
         PriorityQueue<Node> binaryHeap = new PriorityQueue<>();
         binaryHeap.add(new Node(from, 0, 0, null, null));
 
@@ -166,18 +181,20 @@ public class Graph {
         return null;
     }
 
-    private Map<Stop,String> fromatAnswer(Node lastNode){
-        Map<Stop,String> answer = new LinkedHashMap<>();
+    private LinkedHashMap<Stop,String> fromatAnswer(Node lastNode){
+        LinkedHashMap<Stop,String> answer = new LinkedHashMap<>();
         Node beforLast=null;
-        answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
+        String linje = getRouteNameFromNode(lastNode);
+        answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime()+" Linje:"+linje);
             while (lastNode.getParent() != null) {
                 beforLast = lastNode;
                 lastNode = lastNode.getParent();
-                if (lastNode.getUsedEdge() != null) {
-                    answer.put(lastNode.getStop(), lastNode.getUsedEdge().getArrivelTime());
+                linje = getRouteNameFromNode(beforLast);
+                if (lastNode.getUsedEdge() != null && !getRouteNameFromNode(lastNode).equals(getRouteNameFromNode(beforLast))) {
+                    answer.put(beforLast.getStop(), beforLast.getUsedEdge().getArrivelTime()+ " Linje:"+linje);
                 }
-                else{
-                    answer.put(lastNode.getStop(), beforLast.getUsedEdge().getDepatrureTime());
+                else if (lastNode.getUsedEdge()==null){
+                    answer.put(lastNode.getStop(), beforLast.getUsedEdge().getDepatrureTime()+" Linje:"+linje);
                 }
             }
         return answer;

@@ -14,11 +14,30 @@ public class Node implements Comparable<Node>{
         this.parent=parent;
         this.usedEdge = usedEdge;
     }
-public Edge getUsedEdge() {
-    return usedEdge;
-}
+
+    public Stop getStop() {
+        return stop;
+    }
 
 
+    public double getFn() {
+        return gn+hn;
+    }
+    
+    public double getGn() {
+        return gn;
+    }
+    public double getHn() {
+        return hn;
+    }
+ 
+    public Node getParent() {
+        return parent;
+    }
+
+    public Edge getUsedEdge() {
+        return usedEdge;
+    }
 
     @Override
     public int compareTo(Node o) {
@@ -29,26 +48,10 @@ public Edge getUsedEdge() {
         }
         return 0;
     }
-    public double getFn() {
-        return gn+hn;
-    }
-    public Stop getStop() {
-        return stop;
-    }
-    public double getGn() {
-        return gn;
-    }
-    public double getHn() {
-        return hn;
-    }
-    
-    public Node getParent() {
-        return parent;
-    }
+
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return stop.toString();
     }
 }

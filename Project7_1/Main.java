@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Graph g = new Graph();
         initGraph(g);
-        System.out.print(g.findShotestPathWithId("740021647", "740012883", "08:30:00"));
+        System.out.print(g.findShotestPathWithId("740021647", "740024926", "14:09:00"));
 
         //System.out.println(g.getRoads());
     }

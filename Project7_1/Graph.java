@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class Graph {
+    private static final int TRANSFER_PENELTY = 300;
     private Map<String, Stop> stops = new HashMap<>();
     private Map<String, Trip> trips = new HashMap<>();
     private Map<String, Route> routes = new HashMap<>();
@@ -79,9 +80,8 @@ public class Graph {
         }
     }
 
-
-    public LinkedHashMap<Stop, String> findShotestPathWithId(String from, String to,String time) {
-        /*Stop sFrom=null;
+    public LinkedHashMap<Stop,String> findShotestPathWithName(String from, String to, String time){
+        Stop sFrom=null;
         Stop sTo = null;
         for(String key:stops.keySet()){
             Stop stop = stops.get(key);
@@ -94,31 +94,43 @@ public class Graph {
 
         }
         if(sFrom==null || sTo==null){
-            throw new IllegalArgumentException(from+" eller " +to + "existerar ej"+sFrom+sTo);
-        }*/
+            throw new IllegalArgumentException(from+"("+sFrom +")" +" eller " +to +"("+sTo+"9" + "existerar ej"+ sTo);
+        }
+        return aStarSerch(sFrom, sTo, time);
+    }
+    public LinkedHashMap<Stop, String> findShotestPathWithId(String from, String to,String time) {
         return aStarSerch(stops.get(from), stops.get(to),time);
     }
 
     private LinkedHashMap<Stop, String> aStarSerch(Stop from, Stop to,String startTime) {
         PriorityQueue<Node> binaryHeap = new PriorityQueue<>();
         binaryHeap.add(new Node(from, 0, 0, null, null));
-
         Map<Stop, Double> visited = new HashMap<>();
+        
         while (!binaryHeap.isEmpty()) {
             Node current = binaryHeap.poll();
+            if (visited.containsKey(current.getStop()) &&current.getGn() > visited.get(current.getStop())) {
+                continue;
+            }
             if (current.getStop().equals(to)) {
                 return fromatAnswer(current);
             }
 
             for (Edge edge : roads.get(current.getStop())) {
                 Stop stop = edge.getTo();
-                double newCost;
-                if (current.getUsedEdge() != null) {
-                    newCost = current.getGn()+ edge.getTravelCost()+ edge.getWaitingCostFrom(current.getUsedEdge());
-                } else {
-                    newCost = current.getGn()+edge.getWaitingCostFrom(startTime)
-                            + edge.getTravelCost();
+                double newCost=current.getGn()+edge.getTravelCost();
+
+                if (current.getUsedEdge() != null &&
+                    !getRouteNameFromNode(current).equals(edge.getStopTime().getTrip().getRoute().getName())) {
+                    newCost +=TRANSFER_PENELTY;
                 }
+
+                if (current.getUsedEdge() != null) {
+                    newCost += edge.getWaitingCostFrom(current.getUsedEdge());
+                } else {
+                    newCost += edge.getWaitingCostFrom(startTime);                
+                }
+
                 if (!visited.containsKey(stop)|| visited.get(stop)>newCost) {
                     binaryHeap.add(new Node(stop,newCost,stop.calculateDistanceInTime(to), current, edge));
                     visited.put(stop, newCost);

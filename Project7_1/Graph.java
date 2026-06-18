@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class Graph {
-    private static final int TRANSFER_PENELTY = 300;
+    private static final int TRANSFER_TIME = 300;
     private Map<String, Stop> stops = new HashMap<>();
     private Map<String, Trip> trips = new HashMap<>();
     private Map<String, Route> routes = new HashMap<>();
@@ -122,7 +122,7 @@ public class Graph {
 
                 if (current.getUsedEdge() != null &&
                     !getRouteNameFromNode(current).equals(edge.getStopTime().getTrip().getRoute().getName())) {
-                    newCost +=TRANSFER_PENELTY;
+                    newCost +=TRANSFER_TIME;
                 }
 
                 if (current.getUsedEdge() != null) {
